@@ -1,8 +1,8 @@
 requirements
 ============
 
-A little `Flask <http://flask.pocoo.org/>`_ app to pull out dependency libraries
-from requirements.txt files in your projects located on `GitHub <http://github.com/>`_.
+A little [Flask](<http://flask.pocoo.org/>) app to pull out dependency libraries
+from requirements.txt files in your projects located on [GitHub](<http://github.com/>).
 
 
 Quickstart
