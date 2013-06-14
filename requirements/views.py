@@ -35,7 +35,7 @@ def index():
 @app.route('/db_setup')
 def db_setup():
     db.create_all()
-    admin = User(1, 'matt', 0)
+    admin = User('matt')
     db.session.add(admin)
     db.session.commit()
     return 'ok'
