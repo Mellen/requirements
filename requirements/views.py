@@ -44,7 +44,8 @@ def db_setup():
 @app.route('/dataz')
 def dataz():
     users = User.query.all()
-    return render_template('users.html', users)
+    context = {'users': users}
+    return render_template('users.html', **context)
 
 
 @github.access_token_getter
