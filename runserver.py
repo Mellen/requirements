@@ -1,2 +1,4 @@
 from requirements import app
-app.run(debug=True)
+
+app.config.from_object('requirements.settings')
+app.run()
