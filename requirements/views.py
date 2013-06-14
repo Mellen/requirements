@@ -38,6 +38,12 @@ def db_setup():
     return 'ok'
 
 
+@app.route('/dataz')
+def dataz():
+    users = User.query.all()
+    return render_template('users.html', users)
+
+
 @github.access_token_getter
 def token_getter():
     user = g.user
