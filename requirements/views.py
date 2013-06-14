@@ -30,6 +30,12 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/db_setup')
+def db_setup():
+    db.create_all()
+    return 'ok'
+
+
 @github.access_token_getter
 def token_getter():
     user = g.user

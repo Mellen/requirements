@@ -4,7 +4,6 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from requirements import app
 
 db = SQLAlchemy(app)
-# db.create_all()
 
 
 class User(db.Model):
