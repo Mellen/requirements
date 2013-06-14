@@ -1,3 +1,5 @@
+import os
+
 from flask import g, render_template, request, redirect, session, url_for
 from flask.ext.github import GithubAuth
 
@@ -6,8 +8,8 @@ from requirements.models import db, User
 
 
 github = GithubAuth(
-    client_id=app.config.get('GH_CLIENT_ID'),
-    client_secret=app.config.get('GH_CLIENT_SECRET'),
+    client_id=os.environ.get('GH_CLIENT_ID'),
+    client_secret=os.environ.get('GH_CLIENT_SECRET'),
     session_key='user_id',
 )
 
