@@ -57,16 +57,18 @@ def authorized(resp):
     p(resp)
     p(jsonify(resp))
     import os
-    p(os.environ.get('GH_CLIENT_ID'))
-    p(type(os.environ.get('GH_CLIENT_ID')))
+    p(os.environ.get('GH_CLIENT_SECRET'))
+    p(type(os.environ.get('GH_CLIENT_SECRET')))
     if resp is None:
         return 'Access denied: reason=%s error=%s' % (
             request.args['error_reason'],
             request.args['error_description']
         )
-    session['github_token'] = (resp['access_token'], '')
-    me = github.get('user')
-    return jsonify(me.data)
+    if 'access_token' in resp:
+        session['github_token'] = (resp['access_token'], '')
+        me = github.get('user')
+        return jsonify(me.data)
+    return str(resp)
 
 
 @app.route('/login')
