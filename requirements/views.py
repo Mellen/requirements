@@ -1,4 +1,3 @@
-import logging
 import os
 import sys
 
@@ -8,17 +7,16 @@ from flask.ext.github import GithubAuth
 from requirements import app
 from requirements.models import db, User
 
-
-l = logging.getLogger()
-s = logging.StreamHandler(sys.stdout)
-s.setLevel(logging.DEBUG)
-l.addHandler(s)
-
 github = GithubAuth(
     client_id=os.environ.get('GH_CLIENT_ID'),
     client_secret=os.environ.get('GH_CLIENT_SECRET'),
     session_key='user_id',
 )
+
+
+def p(s):
+    print s
+    sys.stdout.flush()
 
 
 @app.before_request
@@ -73,12 +71,15 @@ def token_getter():
 @app.route('/oauth/callback')
 @github.authorized_handler
 def authorized(resp):
+    p('test')
     next_url = request.args.get('next') or url_for('index')
     if resp is None:
-        logging.info('no resp?')
+        p('no resp?')
         return redirect(next_url)
 
     token = resp['access_token']
+    p('token')
+    p(token)
     user = User.query.filter_by(github_access_token=token).first()
     if user is None:
         user = User(token)
@@ -87,6 +88,8 @@ def authorized(resp):
     db.session.commit()
 
     session['user_id'] = user.id
+    p('user id')
+    p(user.id)
 
     return 'Success'
 
