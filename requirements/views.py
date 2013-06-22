@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 
 from flask import g, render_template, request, redirect, session, url_for
 from flask.ext.github import GithubAuth
@@ -7,6 +8,11 @@ from flask.ext.github import GithubAuth
 from requirements import app
 from requirements.models import db, User
 
+
+l = logging.getLogger()
+s = logging.StreamHandler(sys.stdout)
+s.setLevel(logging.DEBUG)
+l.addHandler(s)
 
 github = GithubAuth(
     client_id=os.environ.get('GH_CLIENT_ID'),
