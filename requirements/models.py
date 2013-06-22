@@ -41,7 +41,7 @@ class Package(db.Model):
 class Sync(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     repo_id = db.Column(db.Integer, db.ForeignKey('repo.id'))
-    lib_name = db.Column(db.Integer, db.ForeignKey('pypilibrary.lib_name'))
+    lib_name = db.Column(db.Integer, db.ForeignKey('package.id'))
     last_sync_date_time = db.Column(db.DateTime, default=db.func.now, onupdate=db.func.now)
     last_sync_user = db.Column(db.Integer, db.ForeignKey('user.id'))
     
