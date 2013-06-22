@@ -54,4 +54,7 @@ class Sync(db.Model):
     last_sync_date_time = db.Column(db.DateTime, default=db.func.now, onupdate=db.func.now)
     last_sync_user = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    
+    def __repr__(self):
+        repo = Repo.query(id=repo_id)
+        package = Package.query(id=package_id)
+        return '<Sync on repo {0} for {1} {2} at {3} by {4}>'.format(repo.repo_name, package.package, package.version, self.last_sync_date_time, self.last_sync_date_time)

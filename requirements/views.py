@@ -58,7 +58,7 @@ def testdata():
     result += "{0} is member of {1}".format(str(me), str(me.orgs[0])).replace('<', '&lt;')
     result += '<br>'
     for member in ro.members:
-        result += "{0} has member {1}".format(str(ro), str(member)).replace('<', '&lt;')
+        result += "{0} has member {1} <br>".format(str(ro), str(member)).replace('<', '&lt;')
     return result
 
 @app.route('/db_reset')
