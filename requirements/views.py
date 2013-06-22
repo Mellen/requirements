@@ -75,17 +75,18 @@ def authorized(resp):
         flash('Access denied: reason=%s error=%s' % (
             request.args['error_reason'],
             request.args['error_description']), 'error')
+
     if 'access_token' in resp:
-        token = resp['access_token']
+        token = (resp['access_token'], '')
 
-        user = User.query.filter_by(access_token=token).first()
-        if user is None:
-            user = User(token)
-            db.session.add(user)
-        user.access_token = token
-        db.session.commit()
+        # user = User.query.filter_by(access_token=token).first()
+        # if user is None:
+        #     user = User(token)
+        #     db.session.add(user)
+        # user.access_token = token
+        # db.session.commit()
 
-        session['user_id'] = user.id
+        # session['user_id'] = user.id
         session['github_token'] = token
         me = github.get('user')
         return jsonify(me.data)
