@@ -47,7 +47,7 @@ def create_user(token):
 @app.route('/sync')
 def sync():
     if 'github_token' in session:
-        s = github.get('user')
+        s = github.get('user/repos')
         return jsonify(s.data)
     return redirect(url_for('login'))
 
@@ -88,8 +88,7 @@ def authorized(resp):
 
         session['user_id'] = user.id
         session['github_token'] = token
-        me = github.get('user')
-        return jsonify(me.data)
+        return redirect(url_for('sync'))
     return flash(str(resp), 'error')
 
 
