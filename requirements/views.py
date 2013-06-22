@@ -79,14 +79,14 @@ def authorized(resp):
     if 'access_token' in resp:
         token = (resp['access_token'], '')
 
-        # user = User.query.filter_by(access_token=token).first()
-        # if user is None:
-        #     user = User(token)
-        #     db.session.add(user)
-        # user.access_token = token
-        # db.session.commit()
+        user = User.query.filter_by(access_token=token[0]).first()
+        if user is None:
+            user = User(token[0])
+            db.session.add(user)
+        user.access_token = token[0]
+        db.session.commit()
 
-        # session['user_id'] = user.id
+        session['user_id'] = user.id
         session['github_token'] = token
         me = github.get('user')
         return jsonify(me.data)
