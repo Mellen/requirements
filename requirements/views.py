@@ -51,6 +51,9 @@ def get_github_oauth_token():
 @app.route('/login/authorized')
 @github.authorized_handler
 def authorized(resp):
+    p('resp')
+    p(resp)
+    p(jsonify(resp))
     if resp is None:
         return 'Access denied: reason=%s error=%s' % (
             request.args['error_reason'],
