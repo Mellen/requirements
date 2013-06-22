@@ -78,7 +78,8 @@ def authorized(resp):
 @app.route('/login')
 def login():
     if session.get('user_id', None) is None:
-        return github.authorize(callback_url=url_for('authorized'))
+        return github.authorize(callback_url=url_for('authorized'),
+            scope='repo')
     else:
         return 'Already logged in'
 
