@@ -68,11 +68,6 @@ def logout():
     return redirect(url_for('index'))
 
 
-@github.tokengetter
-def get_github_oauth_token():
-    return session.get('github_token')
-
-
 @app.route('/login/authorized')
 @github.authorized_handler
 def authorized(resp):
@@ -92,5 +87,11 @@ def authorized(resp):
 
         session['user_id'] = user.id
         session['github_token'] = token
-        return redirect(url_for('sync'))
+        me = github.get('user')
+        return jsonify(me.data)
     return flash(str(resp), 'error')
+
+
+@github.tokengetter
+def get_github_oauth_token():
+    return session.get('github_token')
