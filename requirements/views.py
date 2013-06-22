@@ -54,6 +54,9 @@ def authorized(resp):
     p('resp')
     p(resp)
     p(jsonify(resp))
+    import os
+    p(os.environ.get('GH_CLIENT_ID'))
+    p(type(os.environ.get('GH_CLIENT_ID')))
     if resp is None:
         return 'Access denied: reason=%s error=%s' % (
             request.args['error_reason'],
