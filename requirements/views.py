@@ -14,6 +14,14 @@ def p(s):
     sys.stdout.flush()
 
 
+# @app.before_request
+# def before_request():
+#     token = 'f49a6d03ed47b72ad9ee8b08bd4632e5b4154606'
+#     session['github_token'] = token
+    # user = User.query.filter_by(access_token=token).first()
+    # print user.access_token
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -38,7 +46,10 @@ def create_user(token):
 
 @app.route('/sync')
 def sync():
-    return 'sync here'
+    if 'github_token' in session:
+        s = github.get('user/repos')
+        return jsonify(s.data)
+    return redirect(url_for('login'))
 
 
 @app.route('/login')
@@ -71,7 +82,6 @@ def authorized(resp):
             request.args['error_description']), 'error')
     if 'access_token' in resp:
         token = resp['access_token']
-        p(token)
 
         user = User.query.filter_by(access_token=token).first()
         if user is None:
