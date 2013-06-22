@@ -1,4 +1,3 @@
-
 from flask.ext.sqlalchemy import SQLAlchemy
 
 from requirements import app
@@ -15,17 +14,14 @@ class User(db.Model):
     username = db.Column(db.String)
     github_access_token = db.Column(db.Integer)
     is_member = db.Column(db.Boolean)
-    repos = []
+    repos = db.relationship('Repo',
+                            backref=db.backref('user', lazy='joined'),
+                            lazy='dynamic')
     orgs = db.relationship('User',
                            secondary=member_org_map,
                            backref=db.backref('members', lazy='dynamic'))
 
-<<<<<<< HEAD
-    def __init__(self, username, github_access_token, is_member):
-        self.username = username
-=======
-    def __init__(self, github_access_token):
->>>>>>> 17d3d91756caad7758099c1c8b6d2a0d68d585ec
+    def __init__(self, github_access_token, is_member):
         self.github_access_token = github_access_token
         self.is_member = is_member
         
@@ -38,7 +34,8 @@ class User(db.Model):
 
 class Repo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    github_url = db.Column(db.String)
+    repo_name = db.Column(db.String)
+    user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
 
     def __init__(self):
         pass
