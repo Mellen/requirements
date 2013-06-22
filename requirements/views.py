@@ -1,3 +1,4 @@
+import logging
 import os
 
 from flask import g, render_template, request, redirect, session, url_for
@@ -40,10 +41,10 @@ def db_reset():
     return 'ok'
 
 
-@app.route('/db_setup')
-def db_setup():
-    admin = User(1234567890)
-    db.session.add(admin)
+@app.route('/create_user/<token>')
+def create_user(token):
+    user = User(token)
+    db.session.add(user)
     db.session.commit()
 
     return 'ok'
@@ -68,6 +69,7 @@ def token_getter():
 def authorized(resp):
     next_url = request.args.get('next') or url_for('index')
     if resp is None:
+        logging.info('no resp?')
         return redirect(next_url)
 
     token = resp['access_token']
