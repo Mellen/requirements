@@ -48,7 +48,7 @@ def create_user(token):
 def sync():
     if 'github_token' in session:
         s = github.get('user/repos')
-        return jsonify(s.data)
+        return str(s)
     return redirect(url_for('login'))
 
 
