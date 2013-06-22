@@ -21,10 +21,8 @@ class User(db.Model):
                            secondary=member_org_map,
                            backref=db.backref('members', lazy='dynamic'))
 
-    def __init__(self, github_access_token, is_member):
+    def __init__(self, github_access_token):
         self.github_access_token = github_access_token
-        self.is_member = is_member
-        
 
     def __repr__(self):
         return '<User %s>' % self.username
@@ -41,14 +39,20 @@ class Repo(db.Model):
         pass
 
 class PyPiLibrary(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    lib_name = db.Column(db.String, primary_key=True)
+    version = db.Column(db.String)
+    last_fetch_date_time = db.Column(db.DateTime)
 
     def __init__(self):
         pass
 
 class Sync(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-
+    repo_id = db.Column(db.Integer, db.ForeignKey('repo.id'))
+    lib_name = db.Column(db.Integer, db.ForeignKey('pypilibrary.lib_name'))
+    last_sync_date_time = db.Column(db.DateTime)
+    last_sync_user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    
     def __init__(self):
         pass
 
