@@ -25,9 +25,13 @@
             </ul>
             <ul class="nav pull-right">
                 <li>
-                    <a href='/account/login/github/'>
-                        Sign in with Github
-                    </a>
+                    {% if session.github_token %}
+                        <a href="{{ url_for('logout') }}">{{ session.github_token }}</a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}">
+                            Sign in with Github
+                        </a>
+                    {% endif %}
                 </li>
             </ul>
         </div>
