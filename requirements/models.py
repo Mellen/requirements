@@ -12,8 +12,7 @@ class User(db.Model):
     username = db.Column(db.String)
     github_access_token = db.Column(db.Integer)
 
-    def __init__(self, username, github_access_token):
-        self.username = username
+    def __init__(self, github_access_token):
         self.github_access_token = github_access_token
 
     def __repr__(self):
