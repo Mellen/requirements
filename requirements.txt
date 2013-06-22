@@ -2,6 +2,7 @@ blinker==1.2
 gunicorn==0.17.4
 Flask==0.10.1
 Flask-SQLAlchemy==0.16
+psycopg2==2.5
 raven==3.3.7
 
 # original Flask-GitHub is broken and has limitations for GH API
