@@ -1,5 +1,4 @@
 from flask.ext.sqlalchemy import SQLAlchemy
-from sqlalchemy.ext.declarative import declarative_base
 from requirements import app
 
 db = SQLAlchemy(app)
@@ -54,4 +53,5 @@ class Sync(db.Model):
     package_id = db.Column(db.Integer, db.ForeignKey('package.id'))
     last_sync_date_time = db.Column(db.DateTime, default=db.func.now, onupdate=db.func.now)
     last_sync_user = db.Column(db.Integer, db.ForeignKey('user.id'))
+
     
