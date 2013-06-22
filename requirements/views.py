@@ -16,9 +16,7 @@ def p(s):
 
 @app.route('/')
 def index():
-    gh_user = session.get('github_token')
-    context = {'gh_user': gh_user}
-    return render_template('index.html', **context)
+    return render_template('index.html')
 
 
 @app.route('/db_reset')
@@ -45,6 +43,11 @@ def dataz():
     return render_template('users.html', **context)
 
 
+@app.route('/sync')
+def sync():
+    return 'sync here'
+
+
 @github.tokengetter
 def get_github_oauth_token():
     return session.get('github_token')
@@ -53,21 +56,24 @@ def get_github_oauth_token():
 @app.route('/login/authorized')
 @github.authorized_handler
 def authorized(resp):
-    p('resp')
-    p(resp)
-    p(jsonify(resp))
-    import os
-    p(os.environ.get('GH_CLIENT_SECRET'))
-    p(type(os.environ.get('GH_CLIENT_SECRET')))
     if resp is None:
         return 'Access denied: reason=%s error=%s' % (
             request.args['error_reason'],
             request.args['error_description']
         )
     if 'access_token' in resp:
-        session['github_token'] = (resp['access_token'], '')
-        me = github.get('user')
-        return jsonify(me.data)
+        token = resp['access_token']
+
+        user = User.query.filter_by(access_token=token).first()
+        if user is None:
+            user = User(token)
+            db.session.add(user)
+        user.access_token = token
+        db.session.commit()
+
+        session['user_id'] = user.id
+        session['github_token'] = token
+        return redirect(url_for('sync'))
     return str(resp)
 
 
@@ -83,11 +89,3 @@ def login():
 def logout():
     session.pop('github_token', None)
     return redirect(url_for('index'))
-
-
-@app.route('/orgs/<name>')
-def orgs(name):
-    if github.has_org_access(name):
-        return 'Heck yeah he does!'
-    else:
-        return redirect(url_for('index'))
