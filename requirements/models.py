@@ -6,14 +6,45 @@ from requirements import app
 db = SQLAlchemy(app)
 db.init_app(app)
 
+member_org_map = db.Table('member_org_map',
+                          db.Column('member_id', db.Integer, db.ForeignKey('user.id')),
+                          db.Column('org_id', db.Integer, db.ForeignKey('user.id'))
+)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String)
     github_access_token = db.Column(db.Integer)
+    is_member = db.Column(db.Boolean)
+    repos = []
 
-    def __init__(self, github_access_token):
+    def __init__(self, github_access_token, is_member):
         self.github_access_token = github_access_token
+        self.is_member = is_member
 
     def __repr__(self):
         return '<User %s>' % self.username
+
+    def update_repo_list(self):
+        pass
+
+class Repo(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    github_url = db.Column(db.String)
+
+    def __init__(self):
+        pass
+
+class PyPiLibrary(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    def __init__(self):
+        pass
+
+class Sync(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    def __init__(self):
+        pass
+
+    
