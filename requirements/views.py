@@ -1,4 +1,5 @@
 import os
+import sys
 
 from flask import g, render_template, request, redirect, session, url_for
 from flask.ext.github import GithubAuth
@@ -6,12 +7,16 @@ from flask.ext.github import GithubAuth
 from requirements import app
 from requirements.models import db, User
 
-
 github = GithubAuth(
     client_id=os.environ.get('GH_CLIENT_ID'),
     client_secret=os.environ.get('GH_CLIENT_SECRET'),
     session_key='user_id',
 )
+
+
+def p(s):
+    print s
+    sys.stdout.flush()
 
 
 @app.before_request
@@ -40,10 +45,10 @@ def db_reset():
     return 'ok'
 
 
-@app.route('/db_setup')
-def db_setup():
-    admin = User(1234567890)
-    db.session.add(admin)
+@app.route('/create_user/<token>')
+def create_user(token):
+    user = User(token)
+    db.session.add(user)
     db.session.commit()
 
     return 'ok'
@@ -66,11 +71,15 @@ def token_getter():
 @app.route('/oauth/callback')
 @github.authorized_handler
 def authorized(resp):
+    p('test')
     next_url = request.args.get('next') or url_for('index')
     if resp is None:
+        p('no resp?')
         return redirect(next_url)
 
     token = resp['access_token']
+    p('token')
+    p(token)
     user = User.query.filter_by(github_access_token=token).first()
     if user is None:
         user = User(token)
@@ -79,6 +88,8 @@ def authorized(resp):
     db.session.commit()
 
     session['user_id'] = user.id
+    p('user id')
+    p(user.id)
 
     return 'Success'
 
