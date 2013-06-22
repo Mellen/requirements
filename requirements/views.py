@@ -35,7 +35,7 @@ def index():
 @app.route('/db_setup')
 def db_setup():
     db.create_all()
-    admin = User('matt')
+    admin = User('matt', 1)
     db.session.add(admin)
     db.session.commit()
     return 'ok'
@@ -78,7 +78,8 @@ def authorized(resp):
 @app.route('/login')
 def login():
     if session.get('user_id', None) is None:
-        return github.authorize(callback_url=url_for('authorized'))
+        return github.authorize(callback_url=url_for('authorized'),
+            scope='repo')
     else:
         return 'Already logged in'
 

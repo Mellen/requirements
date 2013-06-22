@@ -18,7 +18,12 @@ class User(db.Model):
     is_member = db.Column(db.Boolean)
     repos = []
 
+<<<<<<< HEAD
     def __init__(self, github_access_token, is_member):
+=======
+    def __init__(self, username, github_access_token):
+        self.username = username
+>>>>>>> eeb1760e054e168db46ef493244b6e1bde1a0033
         self.github_access_token = github_access_token
         self.is_member = is_member
 

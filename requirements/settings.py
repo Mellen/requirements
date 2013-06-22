@@ -8,8 +8,10 @@ SERVER_NAME = '127.0.0.1:8000'
 
 SECRET_KEY = 'lol'
 
-DATABASE_URI = os.environ.get('DATABASE_URI',
+DATABASE_URL = os.environ.get('DATABASE_URL',
     'sqlite:////{0}/requirements.db'.format(DIR_PATH))
+
+SQLALCHEMY_DATABASE_URI = DATABASE_URL
 
 
 # for GitHub auth
