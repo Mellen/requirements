@@ -6,7 +6,7 @@ for your Python projects located on [GitHub](<http://github.com/>).
 
 ### Quickstart
 
-    git clone git@github.com:incuna/requirements.git
+    git clone git@github.com:refreshoxford/requirements.git
     mkvirtualenv requirements
     pip install -r dev_requirements.txt
-    python runserver.py
+    gunicorn requirements:app

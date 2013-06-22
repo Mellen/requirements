@@ -4,8 +4,6 @@ DIR_PATH = os.path.dirname(__file__)
 
 DEBUG = True
 
-SERVER_NAME = '127.0.0.1:8000'
-
 SECRET_KEY = 'lol'
 
 DATABASE_URL = os.environ.get('DATABASE_URL',
