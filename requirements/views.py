@@ -32,9 +32,14 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/db_reset')
+def db_reset():
+    db.drop_all()
+    db.create_all()
+
+
 @app.route('/db_setup')
 def db_setup():
-    db.create_all()
     admin = User('matt', 1)
     db.session.add(admin)
     db.session.commit()
