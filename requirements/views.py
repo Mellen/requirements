@@ -5,7 +5,7 @@ from flask import g, render_template, request, redirect, session, url_for
 from flask.ext.github import GithubAuth
 
 from requirements import app
-from requirements.models import db, User
+from requirements.models import db, User, Repo#, Org
 
 github = GithubAuth(
     client_id=os.environ.get('GH_CLIENT_ID'),
@@ -36,6 +36,48 @@ def after_request(response):
 def index():
     return render_template('index.html')
 
+
+@app.route('/testdata')
+def testdata():
+    db.drop_all()
+    db.create_all()
+    me = User('blah1')
+    me.username = 'Mellen'
+    me.is_member = True
+    
+    notme = User('blah3')
+    notme.username = 'Keith'
+    notme.is_member = True
+
+    ro = User('blah2')
+    ro.username = 'Refresh Oxford'
+    ro.is_member = False
+
+    repo1 = Repo()
+    repo1.repo_name = 'Mellen\'s first repo'
+
+    db.session.add(me)
+    db.session.add(notme)
+    db.session.add(ro)
+    db.session.add(repo1)
+    db.session.commit()
+
+    me.repos.append(repo1)
+
+    ro.members.append(me)
+    ro.members.append(notme)
+
+    db.session.commit()
+    
+    result = '{0}, {1}, {2}'.format(str(me), str(ro), str(repo1)).replace('<', '&lt;')
+    result += '<br>'
+    result += "Mellen's repo is called '{0}'".format(str(me.repos[0])).replace('<', '&lt;')
+    result += '<br>'
+    result += "{0} is member of {1}".format(str(me), str(me.orgs[0])).replace('<', '&lt;')
+    result += '<br>'
+    for member in ro.members:
+        result += "{0} has member {1}".format(str(ro), str(member)).replace('<', '&lt;')
+    return result
 
 @app.route('/db_reset')
 def db_reset():
