@@ -4,6 +4,6 @@ Flask==0.10.1
 Flask-SQLAlchemy==0.16
 raven==3.3.7
 
-# Flask-GitHub has old old version on PyPi
-git+https://github.com/jarodl/flask-github.git#egg=flask-github
+# original Flask-GitHub is broken and has limitations for GH API
+git+https://github.com/refreshoxford/flask-github.git#egg=flask-github
 
