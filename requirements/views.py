@@ -16,7 +16,9 @@ def p(s):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    gh_user = session.get('github_token')
+    context = {'gh_user': gh_user}
+    return render_template('index.html', **context)
 
 
 @app.route('/db_reset')
