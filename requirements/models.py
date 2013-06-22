@@ -20,8 +20,12 @@ class User(db.Model):
                            secondary=member_org_map,
                            backref=db.backref('members', lazy='dynamic'))
 
+<<<<<<< HEAD
     def __init__(self, username, github_access_token, is_member):
         self.username = username
+=======
+    def __init__(self, github_access_token):
+>>>>>>> 17d3d91756caad7758099c1c8b6d2a0d68d585ec
         self.github_access_token = github_access_token
         self.is_member = is_member
         

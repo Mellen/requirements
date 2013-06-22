@@ -37,12 +37,15 @@ def db_reset():
     db.drop_all()
     db.create_all()
 
+    return 'ok'
+
 
 @app.route('/db_setup')
 def db_setup():
-    admin = User('matt', 1)
+    admin = User(1234567890)
     db.session.add(admin)
     db.session.commit()
+
     return 'ok'
 
 
