@@ -2,7 +2,7 @@ import sys
 
 from flask import (
     render_template, request, redirect, session, url_for,
-    jsonify)
+    jsonify, flash)
 
 from requirements import app
 from requirements.github import github
@@ -36,16 +36,25 @@ def create_user(token):
     return 'ok'
 
 
-@app.route('/dataz')
-def dataz():
-    users = User.query.all()
-    context = {'users': users}
-    return render_template('users.html', **context)
-
-
 @app.route('/sync')
 def sync():
     return 'sync here'
+
+
+@app.route('/login')
+def login():
+    if session.get('github_token', None) is None:
+        return github.authorize(callback=url_for('authorized', _external=True))
+    else:
+        flash("You're already logged in.", 'info')
+        return redirect(url_for('sync'))
+
+
+@app.route('/logout')
+def logout():
+    session.pop('github_token', None)
+    flash("You've successfully logged out.", 'info')
+    return redirect(url_for('index'))
 
 
 @github.tokengetter
@@ -57,10 +66,9 @@ def get_github_oauth_token():
 @github.authorized_handler
 def authorized(resp):
     if resp is None:
-        return 'Access denied: reason=%s error=%s' % (
+        flash('Access denied: reason=%s error=%s' % (
             request.args['error_reason'],
-            request.args['error_description']
-        )
+            request.args['error_description']), 'error')
     if 'access_token' in resp:
         token = resp['access_token']
 
@@ -74,18 +82,4 @@ def authorized(resp):
         session['user_id'] = user.id
         session['github_token'] = token
         return redirect(url_for('sync'))
-    return str(resp)
-
-
-@app.route('/login')
-def login():
-    if session.get('github_token', None) is None:
-        return github.authorize(callback=url_for('authorized', _external=True))
-    else:
-        return 'Already logged in'
-
-
-@app.route('/logout')
-def logout():
-    session.pop('github_token', None)
-    return redirect(url_for('index'))
+    return flash(str(resp), 'error')
