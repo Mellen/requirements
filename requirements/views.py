@@ -71,6 +71,7 @@ def authorized(resp):
             request.args['error_description']), 'error')
     if 'access_token' in resp:
         token = (resp['access_token'], '')
+        p(token)
 
         user = User.query.filter_by(access_token=token).first()
         if user is None:
